@@ -22,3 +22,4 @@ const atencionSchema = new mongoose.Schema({
 atencionSchema.index({ animalId: 1, createdAt: -1 });
 
 module.exports = mongoose.model('AtencionClinica', atencionSchema, 'atenciones');
+
