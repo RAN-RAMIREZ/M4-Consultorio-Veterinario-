@@ -33,6 +33,11 @@ app.use((err, req, res, next) => {
       error: { codigo: 'JSON_INVALIDO', mensaje: 'El cuerpo de la petición no es JSON válido' }
     });
   }
+  if (err && err.name === 'CastError') {
+    return res.status(404).json({
+      error: { codigo: 'RECURSO_NO_ENCONTRADO', mensaje: 'El identificador proporcionado no existe' }
+    });
+  }
   console.error(err);
   res.status(500).json({
     error: { codigo: 'ERROR_INTERNO', mensaje: 'Ocurrió un error interno' }

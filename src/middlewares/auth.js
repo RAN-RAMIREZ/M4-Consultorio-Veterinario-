@@ -9,12 +9,19 @@ const validarSesion = async (req, res, next) => {
 
   try {
     const respuesta = await fetch(`${process.env.NUCLEO_URL}/api/nucleo/sesiones/actual`, {
-      headers: { Authorization: authHeader }
+      headers: { Authorization: authHeader },
+      signal: AbortSignal.timeout(10000)
     });
 
-    if (!respuesta.ok) {
+    if (respuesta.status === 401) {
       return res.status(401).json({
         error: { codigo: 'TOKEN_INVALIDO', mensaje: 'El token no es válido o expiró' }
+      });
+    }
+
+    if (!respuesta.ok) {
+      return res.status(503).json({
+        error: { codigo: 'NUCLEO_NO_DISPONIBLE', mensaje: 'El Núcleo respondió con error inesperado' }
       });
     }
 
@@ -22,7 +29,7 @@ const validarSesion = async (req, res, next) => {
     next();
   } catch (err) {
     return res.status(503).json({
-      error: { codigo: 'NUCLEO_NO_DISPONIBLE', mensaje: 'Error al validar sesión con el Núcleo' }
+      error: { codigo: 'NUCLEO_NO_DISPONIBLE', mensaje: 'Error o tiempo agotado al validar sesión con el Núcleo' }
     });
   }
 };
