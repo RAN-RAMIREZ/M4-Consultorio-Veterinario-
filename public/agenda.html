@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultorio Municipal – Agenda Diaria</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Consultorio Veterinario – Agenda Diaria</h1>
+    <div id="user-info"></div>
+    <nav>
+      <a href="agenda.html" class="active">Agenda Diaria</a>
+      <a href="historial.html">Historial Clínico</a>
+      <button id="btn-logout">Cerrar Sesión</button>
+    </nav>
+  </header>
+
+  <main class="container">
+  
+    <section class="card filters">
+      <div class="form-group">
+        <label for="filtro-fecha">Fecha de atención:</label>
+        <input type="date" id="filtro-fecha" />
+      </div>
+      <div class="form-group">
+        <label for="filtro-estado">Estado:</label>
+        <select id="filtro-estado">
+          <option value="">Todos</option>
+          <option value="agendada">Agendada</option>
+          <option value="confirmada">Confirmada</option>
+          <option value="atendida">Atendida</option>
+          <option value="ausente">Ausente</option>
+          <option value="cancelada">Cancelada</option>
+        </select>
+      </div>
+      <button id="btn-filtrar" class="btn-primary">Consultar Agenda</button>
+    </section>
+
+
+    <div id="alert-box" class="alert hidden" role="alert"></div>
+
+
+    <section class="card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Bloque (UTC/Local)</th>
+            <th>ID Animal</th>
+            <th>Tutor / Responsable</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+            <th>Acciones Permitidas</th>
+          </tr>
+        </thead>
+        <tbody id="agenda-tbody">
+          <tr><td colspan="6">Cargando citas...</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Controles de Paginación -->
+      <div class="pagination-controls">
+        <div class="page-size">
+          <label for="limit-select">Mostrar:</label>
+          <select id="limit-select">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+        <div class="page-nav">
+          <button id="btn-prev" disabled>Anterior</button>
+          <span id="page-indicator">Página 1 de 1 (Total: 0)</span>
+          <button id="btn-next" disabled>Siguiente</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/agenda.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultorio Municipal – Historial Clínico</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Historial Clínico Veterinario</h1>
+    <div id="user-info"></div>
+    <nav id="main-nav">
+
+    </nav>
+  </header>
+
+  <main class="container">
+    <div id="alert-box" class="alert hidden" role="alert"></div>
+
+
+    <section id="panel-busqueda-vet" class="card hidden">
+      <h2>Búsqueda de Paciente (Acceso Clínico Completo)</h2>
+      <div class="form-inline">
+        <input type="text" id="input-animal-id" placeholder="Ej: SIM-000001 o A-0001" />
+        <button id="btn-buscar-animal" class="btn-primary">Consultar Ficha</button>
+      </div>
+    </section>
+
+
+    <section id="panel-mis-mascotas" class="card hidden">
+      <h2>Mis Mascotas Registradas</h2>
+      <p class="text-muted">Por normativa de privacidad (RN-05 / Ley 21.719), solo visualizas animales asociados a tu RUT.</p>
+      <div class="form-inline">
+        <select id="select-mis-mascotas">
+          <option value="">Cargando tus mascotas...</option>
+        </select>
+      </div>
+    </section>
+
+
+    <section id="ficha-animal-header" class="card hidden">
+      <div class="animal-summary">
+        <div>
+          <h3 id="animal-nombre-id">Animal: -</h3>
+          <p id="animal-detalle">Especie / Microchip / Estado M1</p>
+        </div>
+        <button id="btn-nueva-atencion" class="btn-success hidden">+ Registrar Atención Clínica</button>
+      </div>
+    </section>
+
+
+    <section id="form-atencion-container" class="card hidden">
+      <h3>Registrar y Sellar Atención Clínica (RN-06 / RN-09)</h3>
+      <form id="form-nueva-atencion">
+        <input type="hidden" id="atencion-cita-id" />
+        <div class="form-group">
+          <label for="anamnesis">Anamnesis y Examen Físico *</label>
+          <textarea id="anamnesis" required rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="diagnostico">Diagnóstico Clínico *</label>
+          <input type="text" id="diagnostico" required />
+        </div>
+        <div class="form-group">
+          <label for="receta">Prescripción / Receta Digital (RN-07)</label>
+          <textarea id="receta" rows="2" placeholder="Medicamento, dosis, frecuencia y duración..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="vacuna">Vacuna Aplicada (Opcional - RF-11)</label>
+          <input type="text" id="vacuna" placeholder="Ej: Óctuple, Antirrábica (Lote)" />
+        </div>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="recomienda-esterilizacion" />
+          <label for="recomienda-esterilizacion">Registrar recomendación clínica de esterilización (RF-10)</label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Guardar y Sellar Ficha</button>
+          <button type="button" id="btn-cancelar-atencion" class="btn-secondary">Cancelar</button>
+        </div>
+      </form>
+    </section>
+
+
+    <section id="timeline-section" class="hidden">
+      <h2>Historial Cronológico de Atenciones</h2>
+      <div id="timeline-container" class="timeline"></div>
+    </section>
+  </main>
+
+  <script type="module" src="js/historial.js"></script>
+</body>
+</html>

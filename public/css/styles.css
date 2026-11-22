@@ -1,0 +1,62 @@
+:root {
+  --primary: #1b6ca8;
+  --success: #2e7d32;
+  --warning: #ed6c02;
+  --danger: #d32f2f;
+  --bg: #f4f6f8;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --border: #d1d5db;
+}
+
+* { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+body { margin: 0; background: var(--bg); color: var(--text); }
+
+.topbar {
+  background: var(--primary); color: #fff; padding: 1rem 2rem;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+.topbar h1 { margin: 0; font-size: 1.25rem; }
+.topbar nav { display: flex; gap: 1rem; align-items: center; }
+.topbar a { color: #e0f2fe; text-decoration: none; font-weight: 500; }
+.topbar a.active { color: #fff; border-bottom: 2px solid #fff; }
+
+.container { max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem; }
+.card { background: var(--card-bg); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+.filters, .form-inline { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; }
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; }
+input, select, textarea { padding: 0.5rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.95rem; }
+
+button, .btn-sm { cursor: pointer; border: none; border-radius: 4px; padding: 0.55rem 1rem; font-weight: 600; text-decoration: none; display: inline-block; }
+.btn-sm { padding: 0.35rem 0.65rem; font-size: 0.85rem; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-success { background: var(--success); color: #fff; }
+.btn-warning { background: var(--warning); color: #fff; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-secondary { background: #6b7280; color: #fff; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.data-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.data-table th, .data-table td { padding: 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
+.data-table th { background: #f9fafb; }
+
+.pagination-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.page-nav { display: flex; align-items: center; gap: 0.75rem; }
+
+.badge { padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+.badge-agendada { background: #e0f2fe; color: #0369a1; }
+.badge-confirmada { background: #dcfce7; color: #15803d; }
+.badge-atendida, .badge-sellada { background: #f3e8ff; color: #6b21a8; }
+.badge-ausente { background: #fef3c7; color: #b45309; }
+.badge-cancelada { background: #fee2e2; color: #b91c1c; }
+
+.alert { padding: 0.85rem 1rem; border-radius: 6px; margin-bottom: 1rem; background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+.hidden { display: none !important; }
+.text-muted { color: #6b7280; font-size: 0.9rem; }
+
+.timeline-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
+.receta-box { background: #f0fdf4; border-left: 4px solid var(--success); padding: 0.6rem; margin: 0.5rem 0; }
+.notas-complementarias { background: #f8fafc; padding: 0.75rem; border-radius: 6px; margin-top: 0.75rem; }
+.add-nota-box { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+.add-nota-box input { flex: 1; }
