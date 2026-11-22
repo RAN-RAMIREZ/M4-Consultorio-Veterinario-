@@ -1,9 +1,25 @@
 const express = require('express');
 const router = express.Router();
+
 const { validarSesion, permitirPerfiles } = require('../middlewares/auth');
 
-router.get('/ping', validarSesion, (req, res) => {
-  res.json({ ok: true, recurso: 'vacunas', usuario: req.usuario.rut });
-});
+const {
+  crearVacuna,
+  obtenerVacunas
+} = require('../controllers/vacunaController');
+
+router.post(
+  '/',
+  validarSesion,
+  permitirPerfiles('veterinario'),
+  crearVacuna
+);
+
+router.get(
+  '/:atencionId',
+  validarSesion,
+  permitirPerfiles('veterinario', 'vecino'),
+  obtenerVacunas
+);
 
 module.exports = router;
