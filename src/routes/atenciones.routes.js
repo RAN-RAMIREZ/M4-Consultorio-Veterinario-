@@ -69,4 +69,50 @@ router.post('/', validarSesion, permitirPerfiles('veterinario'), async (req, res
   res.status(201).json(atencion);
 });
 
+// Busca la atención por id; si no existe responde 404 y devuelve null
+const buscarAtencion = async (req, res) => {
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    error(res, 404, 'ATENCION_NO_ENCONTRADA', 'La atención indicada no existe');
+    return null;
+  }
+  const atencion = await AtencionClinica.findById(req.params.id);
+  if (!atencion) {
+    error(res, 404, 'ATENCION_NO_ENCONTRADA', 'La atención indicada no existe');
+    return null;
+  }
+  return atencion;
+};
+
+// RN-06 / RNF-03: la ficha sellada no se modifica ni se elimina
+const rechazarCambio = async (req, res) => {
+  const atencion = await buscarAtencion(req, res);
+  if (!atencion) return;
+  return error(res, 409, 'FICHA_INMUTABLE',
+    'La atención clínica ya está cerrada y no puede modificarse; solo se admiten notas complementarias');
+};
+
+router.put('/:id', validarSesion, permitirPerfiles('veterinario'), rechazarCambio);
+router.patch('/:id', validarSesion, permitirPerfiles('veterinario'), rechazarCambio);
+router.delete('/:id', validarSesion, permitirPerfiles('veterinario'), rechazarCambio);
+
+// RN-06: única forma de agregar información a una ficha sellada (adenda fechada y firmada)
+router.post('/:id/notas', validarSesion, permitirPerfiles('veterinario'), async (req, res) => {
+  const { texto } = req.body ?? {};
+  if (!textoValido(texto)) {
+    return error(res, 400, 'DATOS_FALTANTES', 'Falta el campo obligatorio: texto');
+  }
+  if (texto.trim().length > 1000) {
+    return error(res, 400, 'DATOS_INVALIDOS', 'El texto de la nota no puede superar 1000 caracteres');
+  }
+
+  const atencion = await buscarAtencion(req, res);
+  if (!atencion) return;
+
+  atencion.notasComplementarias.push({ texto, veterinarioRut: req.usuario.rut });
+  await atencion.save();
+
+  const nota = atencion.notasComplementarias.at(-1);
+  res.status(201).json({ atencionId: atencion._id, nota });
+});
+
 module.exports = router;
