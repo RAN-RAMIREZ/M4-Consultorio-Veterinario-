@@ -28,7 +28,7 @@ function verificarSesion() {
 
   
   if (!token || !usuario || !['funcionario', 'veterinario'].includes(usuario.perfil)) {
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
     return;
   }
   state.usuario = usuario;
@@ -65,7 +65,7 @@ function configurarEventos() {
 
   document.getElementById('btn-logout').addEventListener('click', () => {
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
   });
 }
 
@@ -89,7 +89,7 @@ async function cargarAgenda() {
     const payload = await res.json();
 
     if (!res.ok) {
-      if (res.status === 401) window.location.href = 'login.html';
+      if (res.status === 401) window.location.href = 'index.html';
       mostrarAlerta(payload.error?.mensaje || 'Error al cargar la agenda.');
       return;
     }

@@ -33,7 +33,7 @@ function inicializarPerfil() {
   const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
 
   if (!token || !usuario) {
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
     return false;
   }
 
@@ -65,7 +65,7 @@ function inicializarPerfil() {
 function configurarEventos() {
   document.getElementById('btn-logout')?.addEventListener('click', () => {
     localStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
   });
 
  
@@ -101,13 +101,12 @@ async function cargarMascotasPropias() {
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
-    if (!res.ok) {
+   if (!res.ok) {
       mostrarAlerta('No se pudieron obtener tus mascotas desde el Registro Municipal.');
       return;
     }
-
     const data = await res.json();
-    const animales = Array.isArray(data) ? data : (data.data || data.animales || []);
+    const animales = Array.isArray(data) ? data : (data.datos || data.data || data.animales || []);
 
     if (animales.length === 0) {
       select.innerHTML = '<option value="">No tienes mascotas registradas a tu RUT.</option>';
