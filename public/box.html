@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultorio Municipal – Box Clínico</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Consultorio Veterinario – Box Clínico</h1>
+    <div id="user-info"></div>
+    <nav>
+      <a href="agenda.html">Agenda Diaria</a>
+      <a href="box.html" class="active">Box Clínico</a>
+      <a href="historial.html">Historial Clínico</a>
+      <button id="btn-logout">Cerrar Sesión</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div id="alert-box" class="alert hidden" role="alert"></div>
+    <p id="ok-box" class="card hidden" role="status"></p>
+
+    <!-- Paso 1: elegir una cita confirmada -->
+    <section id="panel-citas" class="card">
+      <h2>1. Cita a atender</h2>
+      <p class="text-muted">Solo se atiende una cita en estado confirmada (RN-08).</p>
+      <div class="form-inline">
+        <select id="select-cita">
+          <option value="">Cargando citas confirmadas...</option>
+        </select>
+        <button id="btn-recargar" class="btn-secondary">Recargar</button>
+      </div>
+    </section>
+
+    <!-- Paso 2: registrar la atención -->
+    <section id="panel-registro" class="card hidden">
+      <h2>2. Registrar atención clínica (HU-01)</h2>
+      <p class="text-muted">Al guardar, la ficha queda sellada y no se puede modificar (RN-06). Solo perfil veterinario (RN-09).</p>
+      <form id="form-atencion">
+        <div class="form-group">
+          <label for="motivoConsulta">Motivo de consulta (anamnesis) *</label>
+          <textarea id="motivoConsulta" rows="2" maxlength="500" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="examenFisico">Examen físico *</label>
+          <textarea id="examenFisico" rows="3" maxlength="2000" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="diagnostico">Diagnóstico *</label>
+          <textarea id="diagnostico" rows="2" maxlength="2000" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="obsEsterilizacion">Recomendación de esterilización (opcional, RF-10)</label>
+          <textarea id="obsEsterilizacion" rows="2" maxlength="1000"
+            placeholder="Solo una observación: el tutor gestiona la hora en el Módulo 2"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Guardar y sellar ficha</button>
+      </form>
+    </section>
+
+    <!-- Paso 3: ficha sellada + adendas -->
+    <section id="panel-ficha" class="card hidden">
+      <h2>3. Ficha clínica <span class="badge badge-sellada">SELLADA (RN-06)</span></h2>
+      <table class="data-table">
+        <tbody>
+          <tr><th>ID atención</th><td id="f-id"></td></tr>
+          <tr><th>Animal</th><td id="f-animal"></td></tr>
+          <tr><th>Veterinario</th><td id="f-vet"></td></tr>
+          <tr><th>Fecha</th><td id="f-fecha"></td></tr>
+          <tr><th>Motivo</th><td id="f-motivo"></td></tr>
+          <tr><th>Examen físico</th><td id="f-examen"></td></tr>
+          <tr><th>Diagnóstico</th><td id="f-diagnostico"></td></tr>
+          <tr><th>Esterilización</th><td id="f-esterilizacion"></td></tr>
+        </tbody>
+      </table>
+
+      <div class="notas-complementarias">
+        <h4>Notas complementarias (adendas fechadas y firmadas)</h4>
+        <ul id="lista-notas"></ul>
+        <form id="form-nota" class="add-nota-box">
+          <input type="text" id="texto-nota" maxlength="1000" placeholder="Agregar nota complementaria..." required />
+          <button type="submit" class="btn-sm btn-secondary">Agregar nota</button>
+        </form>
+      </div>
+
+      <p class="text-muted">
+        Para recetas y vacunas de esta atención, use
+        <a id="link-recetas" href="recetas-vacunas.html">Recetas y vacunas</a> con el ID de atención.
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="js/box.js"></script>
+</body>
+</html>

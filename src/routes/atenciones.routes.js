@@ -112,6 +112,13 @@ const rechazarCambio = async (req, res) => {
     'La atención clínica ya está cerrada y no puede modificarse; solo se admiten notas complementarias');
 };
 
+// Lectura de una ficha completa para el box clínico (solo veterinario, RN-09)
+router.get('/:id', validarSesion, permitirPerfiles('veterinario'), async (req, res) => {
+  const atencion = await buscarAtencion(req, res);
+  if (!atencion) return;
+  res.json(atencion);
+});
+
 router.put('/:id', validarSesion, permitirPerfiles('veterinario'), rechazarCambio);
 router.patch('/:id', validarSesion, permitirPerfiles('veterinario'), rechazarCambio);
 router.delete('/:id', validarSesion, permitirPerfiles('veterinario'), rechazarCambio);
