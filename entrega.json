@@ -1,0 +1,30 @@
+{
+  "modulo": "M4 - Consultorio Veterinario Municipal",
+  "urlBase": "https://m4-consultorio-veterinario.onrender.com",
+  "rutasVerificacion": [
+    {
+      "integrante": "Ranses Encarnacion",
+      "recurso": "citas",
+      "metodo": "GET",
+      "ruta": "/api/consultorio/citas?page=1&limit=10"
+    },
+    {
+      "integrante": "Tomas Zamorano",
+      "recurso": "atenciones",
+      "metodo": "GET",
+      "ruta": "/api/consultorio/atenciones/ping"
+    },
+    {
+      "integrante": "Alex Croocker",
+      "recurso": "historial",
+      "metodo": "GET",
+      "ruta": "/api/consultorio/historial/ping"
+    },
+    {
+      "integrante": "Ignacio Torres",
+      "recurso": "recetas-vacunas",
+      "metodo": "GET",
+      "ruta": "/api/consultorio/recetas/000000000000000000000000"
+    }
+  ]
+}
