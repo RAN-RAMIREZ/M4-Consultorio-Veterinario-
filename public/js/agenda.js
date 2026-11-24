@@ -8,7 +8,6 @@ const state = {
   usuario: null
 };
 
-
 const tbody = document.getElementById('agenda-tbody');
 const alertBox = document.getElementById('alert-box');
 const btnPrev = document.getElementById('btn-prev');
@@ -26,7 +25,6 @@ function verificarSesion() {
   const token = localStorage.getItem('token');
   const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
 
-  
   if (!token || !usuario || !['funcionario', 'veterinario'].includes(usuario.perfil)) {
     window.location.href = 'index.html';
     return;
@@ -73,7 +71,6 @@ async function cargarAgenda() {
   ocultarAlerta();
   const token = localStorage.getItem('token');
 
- 
   const params = new URLSearchParams({
     page: state.page,
     limit: state.limit
@@ -94,8 +91,12 @@ async function cargarAgenda() {
       return;
     }
 
-    const citas = payload.data || payload.items || [];
-    const pag = payload.pagination || { page: state.page, totalPages: 1, total: citas.length };
+    const citas = payload.datos || payload.data || [];
+    const pag = {
+      page: payload.page ?? state.page,
+      totalPages: payload.totalPaginas ?? 1,
+      total: payload.total ?? citas.length
+    };
 
     renderizarTabla(citas);
     actualizarPaginacion(pag);
@@ -129,25 +130,24 @@ function renderizarTabla(citas) {
   }).join('');
 }
 
-
-
 function generarBotonesEstado(cita) {
   const rol = state.usuario.perfil;
+  const idCita = cita._id || cita.citaId;
   const acciones = [];
 
   if (cita.estado === 'agendada') {
     if (rol === 'funcionario') {
-      acciones.push(`<button class="btn-sm btn-success" onclick="cambiarEstado('${cita._id || cita.citaId}', 'confirmada')">Confirmar</button>`);
+      acciones.push(`<button class="btn-sm btn-success" onclick="cambiarEstado('${idCita}', 'confirmada')">Confirmar</button>`);
     }
-    acciones.push(`<button class="btn-sm btn-danger" onclick="cambiarEstado('${cita._id || cita.citaId}', 'cancelada')">Cancelar</button>`);
+    acciones.push(`<button class="btn-sm btn-danger" onclick="cambiarEstado('${idCita}', 'cancelada')">Cancelar</button>`);
   }
 
   if (cita.estado === 'confirmada') {
     if (rol === 'veterinario') {
-      acciones.push(`<a class="btn-sm btn-primary" href="historial.html?animalId=${encodeURIComponent(cita.animalId)}&citaId=${encodeURIComponent(cita._id || cita.citaId)}">Registrar Atención</a>`);
+      acciones.push(`<a class="btn-sm btn-primary" href="box.html?citaId=${encodeURIComponent(idCita)}&animalId=${encodeURIComponent(cita.animalId)}">Registrar Atención</a>`);
     }
-    acciones.push(`<button class="btn-sm btn-warning" onclick="cambiarEstado('${cita._id || cita.citaId}', 'ausente')">Marcar Ausente</button>`);
-    acciones.push(`<button class="btn-sm btn-danger" onclick="cambiarEstado('${cita._id || cita.citaId}', 'cancelada')">Cancelar</button>`);
+    acciones.push(`<button class="btn-sm btn-warning" onclick="cambiarEstado('${idCita}', 'ausente')">Marcar Ausente</button>`);
+    acciones.push(`<button class="btn-sm btn-danger" onclick="cambiarEstado('${idCita}', 'cancelada')">Cancelar</button>`);
   }
 
   if (['atendida', 'ausente', 'cancelada'].includes(cita.estado)) {
@@ -156,7 +156,6 @@ function generarBotonesEstado(cita) {
 
   return acciones.join(' ');
 }
-
 
 window.cambiarEstado = async function(citaId, nuevoEstado) {
   ocultarAlerta();

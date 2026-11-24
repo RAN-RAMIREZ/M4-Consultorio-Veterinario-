@@ -24,17 +24,46 @@ async function consultarM1(ruta, codigo404, msg404) {
 
 // GET /api/consultorio/citas
 router.get('/', validarSesion, permitirPerfiles('vecino', 'comunitario', ...STAFF), async (req, res) => {
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const skip = (page - 1) * limit;
+
   const filtro = {};
-  if (!STAFF.includes(req.usuario.perfil)) filtro.tutorRut = req.usuario.rut;
-  else if (esTexto(req.query.tutorRut)) filtro.tutorRut = req.query.tutorRut.trim();
+
+  // Vecinos y comunitarios solo ven sus propias citas
+  if (!STAFF.includes(req.usuario.perfil)) {
+    filtro.tutorRut = req.usuario.rut;
+  } else if (esTexto(req.query.tutorRut)) {
+    filtro.tutorRut = req.query.tutorRut.trim();
+  }
 
   if (esTexto(req.query.estado)) filtro.estado = req.query.estado.trim();
   if (esTexto(req.query.sedeId)) filtro.sedeId = req.query.sedeId.trim();
+  if (esTexto(req.query.animalId)) filtro.animalId = req.query.animalId.trim();
 
-  const citas = await Cita.find(filtro).sort({ fechaHora: 1 }).select('-__v');
-  res.json({ citas });
+  if (esTexto(req.query.fecha)) {
+    const inicio = new Date(`${req.query.fecha.trim()}T00:00:00.000Z`);
+    const fin = new Date(`${req.query.fecha.trim()}T23:59:59.999Z`);
+    if (!Number.isNaN(inicio.getTime())) {
+      filtro.fechaHora = { $gte: inicio, $lte: fin };
+    }
+  }
+
+  const [total, datos] = await Promise.all([
+    Cita.countDocuments(filtro),
+    Cita.find(filtro).sort({ fechaHora: 1 }).skip(skip).limit(limit)
+  ]);
+
+  const totalPaginas = Math.ceil(total / limit);
+
+  res.json({
+    page,
+    limit,
+    total,
+    totalPaginas,
+    datos
+  });
 });
-
 // POST /api/consultorio/citas
 router.post('/', validarSesion, permitirPerfiles('vecino', 'comunitario', 'funcionario'), async (req, res) => {
   const { animalId, sedeId, fechaHora, motivo, tutorRut } = req.body;
