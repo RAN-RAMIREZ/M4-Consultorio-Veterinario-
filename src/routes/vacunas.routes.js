@@ -18,7 +18,7 @@ router.post(
 router.get(
   '/:atencionId',
   validarSesion,
-  permitirPerfiles('veterinario', 'vecino'),
+  permitirPerfiles('veterinario', 'vecino', 'comunitario'),
   obtenerVacunas
 );
 

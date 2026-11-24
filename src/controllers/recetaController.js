@@ -26,6 +26,12 @@ const crearReceta = async (req, res) => {
       });
     }
 
+    if (atencion.veterinarioRut !== req.usuario.rut) {
+      return res.status(403).json({
+        error: 'Solo el veterinario responsable puede registrar recetas en esta atención.'
+      });
+    }
+
     const receta = await Receta.create({
       atencionId,
       medicamento,
@@ -73,7 +79,7 @@ const obtenerRecetas = async (req, res) => {
     const esVeterinario = req.usuario.perfil === 'veterinario' &&
       atencion.veterinarioRut === req.usuario.rut;
 
-    const esTutor = req.usuario.perfil === 'vecino' &&
+    const esTutor = ['vecino', 'comunitario'].includes(req.usuario.perfil) &&
       atencion.tutorRut === req.usuario.rut;
 
     if (!esVeterinario && !esTutor) {

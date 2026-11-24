@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recetas y vacunas</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Recetas y vacunas</h1>
+        <a href="historial.html">Volver al historial</a>
+    </header>
+
+    <main>
+        <section id="seccion-veterinario" hidden>
+            <h2>Registrar indicaciones médicas</h2>
+
+            <form id="form-receta">
+                <h3>Nueva receta</h3>
+
+                <label for="atencion-id-receta">ID de la atención clínica:</label>
+                <input type="text" id="atencion-id-receta" required>
+
+                <label for="medicamento">Medicamento:</label>
+                <input type="text" id="medicamento" required>
+
+                <label for="dosis">Dosis:</label>
+                <input type="text" id="dosis" required>
+
+                <label for="frecuencia">Frecuencia:</label>
+                <input type="text" id="frecuencia" required>
+
+                <label for="duracion">Duración:</label>
+                <input type="text" id="duracion" required>
+
+                <button type="submit">Guardar receta</button>
+            </form>
+
+            <hr>
+
+            <form id="form-vacuna">
+                <h3>Registrar vacuna</h3>
+
+                <label for="atencion-id-vacuna">ID de la atención clínica:</label>
+                <input type="text" id="atencion-id-vacuna" required>
+
+                <label for="tipo-vacuna">Tipo de vacuna:</label>
+                <input type="text" id="tipo-vacuna" required>
+
+                <label for="lote-vacuna">Lote:</label>
+                <input type="text" id="lote-vacuna" required>
+
+                <label for="fecha-aplicacion">Fecha de aplicación:</label>
+                <input type="date" id="fecha-aplicacion" required>
+
+                <label for="proxima-dosis">Próxima dosis:</label>
+                <input type="date" id="proxima-dosis">
+
+                <button type="submit">Guardar vacuna</button>
+            </form>
+
+            <p id="mensaje-veterinario" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="seccion-tutor" hidden>
+            <h2>Historial médico de mis mascotas</h2>
+            <label for="select-mascota">Selecciona una mascota:</label>
+            <select id="select-mascota">
+                <option value="">Cargando mascotas...</option>
+            </select>
+            <p id="mensaje-tutor" role="status" aria-live="polite"></p>
+            <div id="lista-atenciones" aria-live="polite"></div>
+        </section>
+
+        <p id="mensaje-acceso" role="alert" hidden></p>
+    </main>
+
+    <script type="module" src="js/recetas-vacunas.js"></script>
+</body>
+</html>

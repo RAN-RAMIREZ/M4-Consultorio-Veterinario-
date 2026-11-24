@@ -14,6 +14,27 @@ router.get('/ping', validarSesion, (req, res) => {
   res.json({ ok: true, recurso: 'atenciones', usuario: req.usuario.rut });
 });
 
+router.get('/animal/:animalId', validarSesion, permitirPerfiles('veterinario', 'vecino', 'comunitario'), async (req, res) => {
+  const animalId = req.params.animalId.trim();
+  if (!textoValido(animalId)) {
+    return error(res, 400, 'ANIMAL_INVALIDO', 'Debes indicar un animalId válido');
+  }
+
+  const filtro = { animalId };
+  if (req.usuario.perfil === 'veterinario') {
+    filtro.veterinarioRut = req.usuario.rut;
+  } else {
+    filtro.tutorRut = req.usuario.rut;
+  }
+
+  const atenciones = await AtencionClinica.find(filtro)
+    .select('_id animalId createdAt')
+    .sort({ createdAt: -1 })
+    .lean();
+
+  res.json({ total: atenciones.length, atenciones });
+});
+
 // HU-01: el veterinario registra la atención de una cita confirmada (RN-06, RN-09)
 router.post('/', validarSesion, permitirPerfiles('veterinario'), async (req, res) => {
   const { citaId, motivoConsulta, examenFisico, diagnostico, obsEsterilizacion } = req.body ?? {};
