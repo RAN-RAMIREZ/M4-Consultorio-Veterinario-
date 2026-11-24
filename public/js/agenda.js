@@ -91,11 +91,12 @@ async function cargarAgenda() {
       return;
     }
 
-    const citas = payload.datos || payload.data || [];
+    const citas = payload.datos || [];
     const pag = {
-      page: payload.page ?? state.page,
-      totalPages: payload.totalPaginas ?? 1,
-      total: payload.total ?? citas.length
+      page: payload.page,
+      limit: payload.limit,
+      total: payload.total,
+      totalPages: payload.totalPaginas
     };
 
     renderizarTabla(citas);

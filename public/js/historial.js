@@ -153,8 +153,8 @@ async function cargarHistorialCompleto(animalId) {
     renderizarEncabezadoAnimal(animal);
 
 
-    const resM4 = await fetch(`${API_CONSULTORIO}/animales/${encodeURIComponent(animalId)}/historial`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+    const resM4 = await fetch(`${API_CONSULTORIO}/historial/${encodeURIComponent(animalId)}`, {
+    headers: { 'Authorization': `Bearer ${token}` }
     });
 
     const payload = await resM4.json();
