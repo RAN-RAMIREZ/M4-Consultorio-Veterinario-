@@ -10,14 +10,19 @@ const STAFF = ['funcionario', 'veterinario', 'jefatura', 'admin'];
 const esTexto = (v) => typeof v === 'string' && v.trim().length > 0;
 const fallar = (res, status, codigo, mensaje) => res.status(status).json({ error: { codigo, mensaje } });
 
-async function consultarM1(ruta, codigo404, msg404) {
+async function consultarM1(ruta, codigo404, msg404, authHeader) {
   let resp;
   try {
-    resp = await fetch(`${process.env.NUCLEO_URL}${ruta}`, { signal: AbortSignal.timeout(10000) });
+    resp = await fetch(`${process.env.NUCLEO_URL}${ruta}`, {
+      headers: { Authorization: authHeader },
+      signal: AbortSignal.timeout(10000)
+    });
   } catch {
     return { err: [503, 'M1_NO_DISPONIBLE', 'No se pudo conectar con M1'] };
   }
   if (resp.status === 404) return { err: [404, codigo404, msg404] };
+  if (resp.status === 401) return { err: [401, 'TOKEN_INVALIDO', 'El token no es válido o expiró'] };
+  if (resp.status === 403) return { err: [403, 'ACCESO_M1_DENEGADO', 'No tienes permiso sobre ese registro en M1'] };
   if (!resp.ok) return { err: [503, 'M1_NO_DISPONIBLE', 'Error inesperado al consultar M1'] };
   return { data: await resp.json() };
 }
@@ -86,19 +91,19 @@ router.post('/', validarSesion, permitirPerfiles('vecino', 'comunitario', 'funci
   if (!rut) return fallar(res, 400, 'TUTOR_REQUERIDO', 'Un funcionario debe indicar un tutorRut válido');
 
   // 1. Validar animal y tutor en M1
-  const resAnimal = await consultarM1(`/api/registro/animales/${encodeURIComponent(animalId.trim())}`, 'ANIMAL_NO_ENCONTRADO', 'Animal no existe en M1');
+  const resAnimal = await consultarM1(`/api/registro/animales/${encodeURIComponent(animalId.trim())}`, 'ANIMAL_NO_ENCONTRADO', 'Animal no existe en M1', req.headers.authorization);
   if (resAnimal.err) return fallar(res, ...resAnimal.err);
 
   const animal = resAnimal.data;
   if (animal.estado === 'fallecido') return fallar(res, 409, 'ANIMAL_FALLECIDO', 'Animal fallecido');
 
   const dueño = animal.tutorRut || animal.responsableRut || animal.tutor?.rut;
-  const comunitario = animal.tipo === 'comunitario' || animal.esComunitario === true;
+  const comunitario = animal.comunitario === true;
   if (esTutor && !comunitario && dueño !== req.usuario.rut) {
     return fallar(res, 403, 'ANIMAL_NO_PERTENECE', 'No tienes permiso para agendar este animal');
   }
 
-  const resTutor = await consultarM1(`/api/registro/tutores/${encodeURIComponent(rut)}`, 'TUTOR_NO_ENCONTRADO', 'Tutor no existe en M1');
+  const resTutor = await consultarM1(`/api/registro/tutores/${encodeURIComponent(rut)}`, 'TUTOR_NO_ENCONTRADO', 'Tutor no existe en M1', req.headers.authorization);
   if (resTutor.err) return fallar(res, ...resTutor.err);
   if (resTutor.data.prohibicionTenencia === true) {
     return fallar(res, 409, 'PROHIBICION_TENENCIA', 'Tutor con prohibición de tenencia');
