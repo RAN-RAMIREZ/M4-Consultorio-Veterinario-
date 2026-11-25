@@ -24,8 +24,11 @@ async function consultarM1(ruta, codigo404, msg404) {
 
 // GET /api/consultorio/citas
 router.get('/', validarSesion, permitirPerfiles('vecino', 'comunitario', ...STAFF), async (req, res) => {
-  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const page = req.query.page === undefined ? 1 : Number(req.query.page);
+  const limit = req.query.limit === undefined ? 20 : Number(req.query.limit);
+  if (!Number.isInteger(page) || page < 1 || !Number.isInteger(limit) || limit < 1 || limit > 100) {
+    return fallar(res, 400, 'PAGINACION_INVALIDA', 'page y limit deben ser enteros positivos (limit máximo 100)');
+  }
   const skip = (page - 1) * limit;
 
   const filtro = {};

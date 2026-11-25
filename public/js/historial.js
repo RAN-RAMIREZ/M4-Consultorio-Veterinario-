@@ -164,7 +164,7 @@ async function cargarHistorialCompleto(animalId) {
       return;
     }
 
-    const atenciones = payload.data || payload.historial || [];
+    const atenciones = payload.datos || [];
     renderizarTimeline(atenciones);
   } catch (err) {
     mostrarAlerta('Error de red al recuperar el historial clínico.');
@@ -211,10 +211,11 @@ function renderizarTimeline(atenciones) {
 
         <div class="timeline-body">
           <p><strong>Diagnóstico:</strong> ${escaparHTML(at.diagnostico)}</p>
-          ${esVet ? `<p><strong>Anamnesis / Examen Físico (Clínico):</strong> ${escaparHTML(at.anamnesis)}</p>` : ''}
+          <p><strong>Motivo:</strong> ${escaparHTML(at.motivoConsulta)}</p>
+          ${esVet ? `<p><strong>Examen físico:</strong> ${escaparHTML(at.examenFisico)}</p>` : ''}
           ${at.receta ? `<div class="receta-box"><strong>Prescripción Digital (RN-07):</strong> ${escaparHTML(at.receta)}</div>` : ''}
           ${at.vacuna ? `<p><strong>Vacuna Administrada:</strong> ${escaparHTML(at.vacuna)}</p>` : ''}
-          ${at.recomiendaEsterilizacion ? `<p class="tag-esterilizacion">✓ Se recomienda evaluación para esterilización (RF-10)</p>` : ''}
+          ${at.obsEsterilizacion ? `<p class="tag-esterilizacion"><strong>Esterilización:</strong> ${escaparHTML(at.obsEsterilizacion)}</p>` : ''}
         </div>
 
         <!-- Notas Complementarias (Inmutabilidad RN-06) -->
