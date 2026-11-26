@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 const Receta = require('../models/Receta');
 const AtencionClinica = require('../models/AtencionClinica');
@@ -8,13 +9,19 @@ const crearReceta = async (req, res) => {
 
     if (!atencionId || !mongoose.Types.ObjectId.isValid(atencionId)) {
       return res.status(400).json({
-        error: 'El identificador de atención no es válido.'
+        error: {
+          codigo: 'ATENCION_ID_INVALIDO',
+          mensaje: 'El identificador de atención no es válido.'
+        }
       });
     }
 
     if (!medicamento || !dosis || !frecuencia || !duracion) {
       return res.status(400).json({
-        error: 'Todos los campos de la receta son obligatorios.'
+        error: {
+          codigo: 'CAMPOS_OBLIGATORIOS',
+          mensaje: 'Todos los campos de la receta son obligatorios.'
+        }
       });
     }
 
@@ -22,13 +29,19 @@ const crearReceta = async (req, res) => {
 
     if (!atencion) {
       return res.status(404).json({
-        error: 'No se encontró la atención clínica.'
+        error: {
+          codigo: 'ATENCION_NO_ENCONTRADA',
+          mensaje: 'No se encontró la atención clínica.'
+        }
       });
     }
 
     if (atencion.veterinarioRut !== req.usuario.rut) {
       return res.status(403).json({
-        error: 'Solo el veterinario responsable puede registrar recetas en esta atención.'
+        error: {
+          codigo: 'ACCESO_DENEGADO',
+          mensaje: 'Solo el veterinario responsable puede registrar recetas en esta atención.'
+        }
       });
     }
 
@@ -48,12 +61,18 @@ const crearReceta = async (req, res) => {
   } catch (error) {
     if (error.name === 'ValidationError') {
       return res.status(400).json({
-        error: error.message
+        error: {
+          codigo: 'DATOS_RECETA_INVALIDOS',
+          mensaje: 'Los datos ingresados para la receta no son válidos.'
+        }
       });
     }
 
     return res.status(500).json({
-      error: 'No se pudo registrar la receta.'
+      error: {
+        codigo: 'ERROR_REGISTRAR_RECETA',
+        mensaje: 'No se pudo registrar la receta.'
+      }
     });
   }
 };
@@ -64,7 +83,10 @@ const obtenerRecetas = async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(atencionId)) {
       return res.status(400).json({
-        error: 'El identificador de atención no es válido.'
+        error: {
+          codigo: 'ATENCION_ID_INVALIDO',
+          mensaje: 'El identificador de atención no es válido.'
+        }
       });
     }
 
@@ -72,7 +94,10 @@ const obtenerRecetas = async (req, res) => {
 
     if (!atencion) {
       return res.status(404).json({
-        error: 'No se encontró la atención clínica.'
+        error: {
+          codigo: 'ATENCION_NO_ENCONTRADA',
+          mensaje: 'No se encontró la atención clínica.'
+        }
       });
     }
 
@@ -84,7 +109,10 @@ const obtenerRecetas = async (req, res) => {
 
     if (!esVeterinario && !esTutor) {
       return res.status(403).json({
-        error: 'No tienes permiso para consultar estas recetas.'
+        error: {
+          codigo: 'ACCESO_DENEGADO',
+          mensaje: 'No tienes permiso para consultar estas recetas.'
+        }
       });
     }
 
@@ -97,7 +125,10 @@ const obtenerRecetas = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      error: 'No se pudieron obtener las recetas.'
+      error: {
+        codigo: 'ERROR_OBTENER_RECETAS',
+        mensaje: 'No se pudieron obtener las recetas.'
+      }
     });
   }
 };

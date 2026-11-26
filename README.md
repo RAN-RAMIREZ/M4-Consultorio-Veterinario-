@@ -8,13 +8,10 @@ Requisitos previos
 
 Para ejecutar el proyecto localmente se necesita:
 
-Node.js.
-
+Node.js versión 18 o superior.
 npm.
-
-Acceso a una base de datos MongoDB.
-
-Conexión a internet para la integración con el Núcleo.
+Acceso a MongoDB Atlas.
+Conexión a internet
 
 Instalación
 
@@ -27,16 +24,18 @@ cd M4-Consultorio-Veterinario-
 3. Instalar las dependencias
 npm install
 4. Configurar las variables de entorno
-Crear un archivo .env en la raíz del proyecto y agregar la siguiente configuración:
-PORT=3000
-MONGODB_URI=URL_DE_CONEXION_MONGODB
-NUCLEO_URL=https://nucleo-tr.onrender.com
-Reemplazar URL_DE_CONEXION_MONGODB por la dirección de conexión correspondiente a MongoDB.
+Copiar el archivo .env.example como .env y completar la variable MONGO_URI con la cadena de conexión a MongoDB Atlas.
+En PowerShell:
+Copy-Item .env.example .env
+
+Las variables PORT=3000 y NUCLEO_URL=https://nucleo-tr.onrender.com vienen predefinidas.
 
 Importante: El archivo .env contiene información de configuración privada y no debe subirse al repositorio.
+
 Recomendado: Crear un archivo .gitignore y poner dentro: 
 node_modules/
 .env
+
 Importante: Si el .env ya está subido a GitHub, agregarlo al .gitignore no lo elimina del repositorio. Habría que retirarlo del seguimiento de Git por separado.
 
 Ejecución del proyecto

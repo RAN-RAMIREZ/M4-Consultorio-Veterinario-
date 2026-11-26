@@ -21,19 +21,28 @@ const crearVacuna = async (req, res) => {
 
     if (!atencionId || !mongoose.Types.ObjectId.isValid(atencionId)) {
       return res.status(400).json({
-        error: 'El identificador de atención no es válido.'
+        error: {
+          codigo: 'ATENCION_ID_INVALIDO',
+          mensaje: 'El identificador de atención no es válido.'
+        }
       });
     }
 
     if (!tipo || !lote || !fechaAplicacion) {
       return res.status(400).json({
-        error: 'El tipo, lote y fecha de aplicación son obligatorios.'
+        error: {
+          codigo: 'CAMPOS_OBLIGATORIOS',
+          mensaje: 'El tipo, lote y fecha de aplicación son obligatorios.'
+        }
       });
     }
 
     if (!esFechaUTCValida(fechaAplicacion)) {
       return res.status(400).json({
-        error: 'La fecha de aplicación debe estar en formato ISO 8601 UTC.'
+        error: {
+          codigo: 'FECHA_APLICACION_INVALIDA',
+          mensaje: 'La fecha de aplicación debe estar en formato ISO 8601 UTC.'
+        }
       });
     }
 
@@ -43,7 +52,10 @@ const crearVacuna = async (req, res) => {
       !esFechaUTCValida(proximaDosis)
     ) {
       return res.status(400).json({
-        error: 'La próxima dosis debe estar en formato ISO 8601 UTC.'
+        error: {
+          codigo: 'PROXIMA_DOSIS_INVALIDA',
+          mensaje: 'La próxima dosis debe estar en formato ISO 8601 UTC.'
+        }
       });
     }
 
@@ -52,7 +64,10 @@ const crearVacuna = async (req, res) => {
       new Date(proximaDosis) < new Date(fechaAplicacion)
     ) {
       return res.status(400).json({
-        error: 'La próxima dosis no puede ser anterior a la aplicación.'
+        error: {
+          codigo: 'FECHA_DOSIS_ANTERIOR',
+          mensaje: 'La próxima dosis no puede ser anterior a la aplicación.'
+        }
       });
     }
 
@@ -60,13 +75,19 @@ const crearVacuna = async (req, res) => {
 
     if (!atencion) {
       return res.status(404).json({
-        error: 'No se encontró la atención clínica.'
+        error: {
+          codigo: 'ATENCION_NO_ENCONTRADA',
+          mensaje: 'No se encontró la atención clínica.'
+        }
       });
     }
 
     if (atencion.veterinarioRut !== req.usuario.rut) {
       return res.status(403).json({
-        error: 'Solo el veterinario responsable puede registrar vacunas en esta atención.'
+        error: {
+          codigo: 'ACCESO_DENEGADO',
+          mensaje: 'Solo el veterinario responsable puede registrar vacunas en esta atención.'
+        }
       });
     }
 
@@ -86,12 +107,18 @@ const crearVacuna = async (req, res) => {
   } catch (error) {
     if (error.name === 'ValidationError') {
       return res.status(400).json({
-        error: error.message
+        error: {
+          codigo: 'DATOS_VACUNA_INVALIDOS',
+          mensaje: 'Los datos ingresados para la vacuna no son válidos.'
+        }
       });
     }
 
     return res.status(500).json({
-      error: 'No se pudo registrar la vacuna.'
+      error: {
+        codigo: 'ERROR_REGISTRAR_VACUNA',
+        mensaje: 'No se pudo registrar la vacuna.'
+      }
     });
   }
 };
@@ -102,7 +129,10 @@ const obtenerVacunas = async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(atencionId)) {
       return res.status(400).json({
-        error: 'El identificador de atención no es válido.'
+        error: {
+          codigo: 'ATENCION_ID_INVALIDO',
+          mensaje: 'El identificador de atención no es válido.'
+        }
       });
     }
 
@@ -110,7 +140,10 @@ const obtenerVacunas = async (req, res) => {
 
     if (!atencion) {
       return res.status(404).json({
-        error: 'No se encontró la atención clínica.'
+        error: {
+          codigo: 'ATENCION_NO_ENCONTRADA',
+          mensaje: 'No se encontró la atención clínica.'
+        }
       });
     }
 
@@ -122,7 +155,10 @@ const obtenerVacunas = async (req, res) => {
 
     if (!esVeterinario && !esTutor) {
       return res.status(403).json({
-        error: 'No tienes permiso para consultar estas vacunas.'
+        error: {
+          codigo: 'ACCESO_DENEGADO',
+          mensaje: 'No tienes permiso para consultar estas vacunas.'
+        }
       });
     }
 
@@ -135,7 +171,10 @@ const obtenerVacunas = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      error: 'No se pudieron obtener las vacunas.'
+      error: {
+        codigo: 'ERROR_OBTENER_VACUNAS',
+        mensaje: 'No se pudieron obtener las vacunas.'
+      }
     });
   }
 };
