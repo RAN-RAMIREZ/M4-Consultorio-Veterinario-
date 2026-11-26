@@ -6,10 +6,10 @@
   "repositorio": "https://github.com/RAN-RAMIREZ/M4-Consultorio-Veterinario-",
   "taiga": "https://tree.taiga.io/project/tomas__-ti3034-fb50-c1-m04",
   "integrantes": [
-    { "nombre": "Ranses Encarnación", "github": "RAN-RAMIREZ", "taiga": "COMPLETAR", "rol": "SM" },
-    { "nombre": "Tomás Zamorano", "github": "TomasZTL", "taiga": "COMPLETAR", "rol": "PO" },
-    { "nombre": "Alex Croocker", "github": "AlexCroocker", "taiga": "COMPLETAR", "rol": "QA" },
-    { "nombre": "Ignacio Torres", "github": "Ignacio-40", "taiga": "COMPLETAR", "rol": "Analista" }
+    { "nombre": "Ranses Encarnación", "github": "RAN-RAMIREZ", "taiga": "iam_ranses", "rol": "SM" },
+    { "nombre": "Tomás Zamorano", "github": "TomasZTL", "taiga": "Tomas__", "rol": "PO" },
+    { "nombre": "Alex Croocker", "github": "AlexCroocker", "taiga": "Alexcroocker11", "rol": "QA" },
+    { "nombre": "Ignacio Torres", "github": "Ignacio-40", "taiga": "Nacho03", "rol": "Analista" }
   ],
   "historias": [
     {
