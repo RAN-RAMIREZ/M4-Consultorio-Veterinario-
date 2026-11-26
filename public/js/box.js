@@ -1,5 +1,4 @@
-// HU-01 · Box clínico del veterinario: registrar la atención, verla sellada y agregar adendas.
-// Todo el texto se muestra con textContent (nunca innerHTML) para evitar XSS (OWASP A03).
+
 const API = '/api/consultorio';
 
 const alertBox = document.getElementById('alert-box');
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await cargarCitasConfirmadas(params.get('citaId'));
 });
 
-// Solo el veterinario usa el box; cualquier otro perfil vuelve al login (RN-09)
+
 function verificarSesion() {
   const token = localStorage.getItem('token');
   const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
@@ -47,7 +46,7 @@ function configurarEventos() {
   document.getElementById('form-nota').addEventListener('submit', agregarNota);
 }
 
-// Llama a la API con el token; si el token venció (401) vuelve al login
+
 async function llamarApi(ruta, opciones = {}) {
   const res = await fetch(`${API}${ruta}`, {
     ...opciones,

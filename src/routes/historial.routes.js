@@ -9,8 +9,6 @@ router.get('/ping', validarSesion, (req, res) => {
   res.json({ ok: true, recurso: 'historial', usuario: req.usuario.rut });
 });
 
-// GET /api/consultorio/historial/:animalId?page=1&limit=20
-// HU-03: atenciones del animal, de la más reciente a la más antigua (RN-05, RN-09)
 router.get('/:animalId', validarSesion, permitirPerfiles('veterinario', 'vecino', 'comunitario'), async (req, res) => {
   const animalId = req.params.animalId.trim();
   const page = req.query.page === undefined ? 1 : Number(req.query.page);
@@ -19,7 +17,6 @@ router.get('/:animalId', validarSesion, permitirPerfiles('veterinario', 'vecino'
     return fallar(res, 400, 'PAGINACION_INVALIDA', 'page y limit deben ser enteros positivos (limit máximo 100)');
   }
 
-  // El animal debe existir en M1; se reenvía el token del usuario
   let resM1;
   try {
     resM1 = await fetch(`${process.env.NUCLEO_URL}/api/registro/animales/${encodeURIComponent(animalId)}`, {
@@ -52,7 +49,6 @@ router.get('/:animalId', validarSesion, permitirPerfiles('veterinario', 'vecino'
     veterinarioRut: at.veterinarioRut,
     motivoConsulta: at.motivoConsulta,
     diagnostico: at.diagnostico,
-    // El examen físico es información clínica: solo la ve el veterinario (RN-09)
     examenFisico: esVet ? at.examenFisico : undefined,
     obsEsterilizacion: at.obsEsterilizacion,
     notasComplementarias: (at.notasComplementarias || []).map((n) => ({
