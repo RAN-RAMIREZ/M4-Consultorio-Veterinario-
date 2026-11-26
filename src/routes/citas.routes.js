@@ -134,7 +134,7 @@ router.post('/', validarSesion, permitirPerfiles('vecino', 'comunitario', 'funci
 
 // PATCH /api/consultorio/citas/:id/estado
 router.patch('/:id/estado', validarSesion, permitirPerfiles('vecino', 'comunitario', 'funcionario', 'veterinario'), async (req, res) => {
-  const { estado } = req.body;
+  const { estado } = req.body ?? {};
   if (!esTexto(estado) || !DESTINOS.includes(estado)) {
     return fallar(res, 400, 'ESTADO_INVALIDO', 'Estado debe ser confirmada, cancelada o ausente');
   }
@@ -147,8 +147,13 @@ router.patch('/:id/estado', validarSesion, permitirPerfiles('vecino', 'comunitar
     if (estado === 'ausente') return fallar(res, 403, 'PERFIL_NO_AUTORIZADO', 'Solo staff puede marcar ausencia');
   }
 
-  if (!ACTIVOS.includes(cita.estado)) {
-    return fallar(res, 409, 'TRANSICION_NO_PERMITIDA', `No se puede cambiar desde estado ${cita.estado}`);
+  // RN-08: confirmar la cita es exclusivo del funcionario municipal
+  if (estado === 'confirmada' && req.usuario.perfil !== 'funcionario') {
+    return fallar(res, 403, 'PERFIL_NO_AUTORIZADO', 'Solo el funcionario puede confirmar citas (RN-08)');
+  }
+
+  if (!ACTIVOS.includes(cita.estado) || cita.estado === estado) {
+    return fallar(res, 409, 'TRANSICION_NO_PERMITIDA', `No se puede pasar de ${cita.estado} a ${estado}`);
   }
 
   cita.estado = estado;

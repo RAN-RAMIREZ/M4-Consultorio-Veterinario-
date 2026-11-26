@@ -1,30 +1,68 @@
 {
-  "modulo": "M4 - Consultorio Veterinario Municipal",
-  "urlBase": "https://m4-consultorio-veterinario.onrender.com",
-  "rutasVerificacion": [
+  "seccion": "FB50-C1",
+  "modulo": 4,
+  "grupo": "G04",
+  "prototipo": "https://m4-consultorio-veterinario.onrender.com",
+  "repositorio": "https://github.com/RAN-RAMIREZ/M4-Consultorio-Veterinario-",
+  "taiga": "https://tree.taiga.io/project/tomas__-ti3034-fb50-c1-m04",
+  "integrantes": [
+    { "nombre": "Ranses Encarnación", "github": "RAN-RAMIREZ", "taiga": "COMPLETAR", "rol": "SM" },
+    { "nombre": "Tomás Zamorano", "github": "TomasZTL", "taiga": "COMPLETAR", "rol": "PO" },
+    { "nombre": "Alex Croocker", "github": "AlexCroocker", "taiga": "COMPLETAR", "rol": "QA" },
+    { "nombre": "Ignacio Torres", "github": "Ignacio-40", "taiga": "COMPLETAR", "rol": "Analista" }
+  ],
+  "historias": [
     {
-      "integrante": "Ranses Encarnacion",
-      "recurso": "citas",
-      "metodo": "GET",
-      "ruta": "/api/consultorio/citas?page=1&limit=10"
+      "id": "HU-06",
+      "titulo": "Agendamiento y gestión de citas",
+      "responsable": "RAN-RAMIREZ",
+      "verificacion": {
+        "metodo": "GET",
+        "ruta": "/api/consultorio/citas?page=1&limit=10",
+        "perfil": "funcionario",
+        "esperado": 200
+      }
     },
     {
-      "integrante": "Tomas Zamorano",
-      "recurso": "atenciones",
-      "metodo": "GET",
-      "ruta": "/api/consultorio/atenciones/ping"
+      "id": "HU-01",
+      "titulo": "Registro de atención clínica y sellado inmutable",
+      "responsable": "TomasZTL",
+      "verificacion": {
+        "metodo": "POST",
+        "ruta": "/api/consultorio/atenciones/6b010f492bb966498f4e0ad1/notas",
+        "perfil": "veterinario",
+        "cuerpo": { "texto": "Control de seguimiento" },
+        "esperado": 201
+      }
     },
     {
-      "integrante": "Alex Croocker",
-      "recurso": "historial",
-      "metodo": "GET",
-      "ruta": "/api/consultorio/historial/ping"
+      "id": "HU-03",
+      "titulo": "Consulta del historial clínico",
+      "responsable": "AlexCroocker",
+      "verificacion": {
+        "metodo": "GET",
+        "ruta": "/api/consultorio/historial/SIM-000001",
+        "perfil": "veterinario",
+        "esperado": 200
+      }
     },
     {
-      "integrante": "Ignacio Torres",
-      "recurso": "recetas-vacunas",
-      "metodo": "GET",
-      "ruta": "/api/consultorio/recetas/000000000000000000000000"
+      "id": "HU-02",
+      "titulo": "Prescripción de receta médica",
+      "responsable": "Ignacio-40",
+      "verificacion": {
+        "metodo": "POST",
+        "ruta": "/api/consultorio/recetas",
+        "perfil": "veterinario",
+        "cuerpo": {
+          "atencionId": "6b010f492bb966498f4e0ad1",
+          "medicamento": "Prednisolona 20 mg",
+          "dosis": "1/2 comprimido",
+          "frecuencia": "Cada 24 horas",
+          "duracion": "5 días"
+        },
+        "esperado": 201
+      }
     }
   ]
 }
